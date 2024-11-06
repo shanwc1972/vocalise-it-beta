@@ -1,0 +1,52 @@
+[
+  {
+    "username": "frank_welker",
+    "email": "frank.welker@gmail.com",
+    "password": "password12345",
+    "savedClips": [
+      {
+        "title": "Scooby-Doo Laugh",
+        "description": "A classic Scooby-Doo laugh from the animated series.",
+        "userId": "605c72d2f1dfb25b8c9f4a01",
+        "duration": 8,
+        "audioURL": "https://example.com/audio/scooby_laugh.mp3",
+        "format": "mp3",
+        "date": "2024-10-30T12:00:00Z"
+      },
+      {
+        "title": "Megatron Command",
+        "description": "A famous Megatron line from Transformers.",
+        "userId": "605c72d2f1dfb25b8c9f4a01",
+        "duration": 12,
+        "audioURL": "https://example.com/audio/megatron_command.mp3",
+        "format": "mp3",
+        "date": "2024-10-31T08:30:00Z"
+      }
+    ]
+  },
+  {
+    "username": "tara_strong",
+    "email": "tara.strong@yahoo.com",
+    "password": "password12345",
+    "savedClips": [
+      {
+        "title": "Timmy Turner Wish",
+        "description": "Timmy wishes for a day off from school.",
+        "userId": "605c72d2f1dfb25b8c9f4a02",
+        "duration": 10,
+        "audioURL": "https://example.com/audio/timmy_turner_wish.mp3",
+        "format": "mp3",
+        "date": "2024-10-31T09:45:00Z"
+      },
+      {
+        "title": "Raven Spell",
+        "description": "Raven casting a powerful spell.",
+        "userId": "605c72d2f1dfb25b8c9f4a02",
+        "duration": 15,
+        "audioURL": "https://example.com/audio/raven_spell.mp3",
+        "format": "mp3",
+        "date": "2024-10-31T10:15:00Z"
+      }
+    ]
+  }
+]

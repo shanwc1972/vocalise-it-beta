@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.read-button {
+    background-color: #007bff;
+}
+
+.save-button {
+    background-color: #28a745;
+}
+
