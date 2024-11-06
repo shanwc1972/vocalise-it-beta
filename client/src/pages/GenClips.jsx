@@ -1,10 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-// Replace with your actual API key and voice ID
-const XI_API_KEY = 'sk_1fa718e479887812560ae779d9acff5a07f721d8261d2837';
-const VOICE_ID = 'pqHfZKP75CvOlQylNhV4'; 
-
 const GenClips = () => {
   const [voiceType, setVoiceType] = useState(["Male", "Female"]);
   const [selectedVoiceType, setSelectedVoiceType] = useState("Male");
@@ -39,8 +35,6 @@ const GenClips = () => {
             voice_settings: {
               stability: 0.9,
               similarity_boost: 0.5,
-              volume: volume /10,
-              speed: voiceSpeed,
               pitch: pitch
             }
           },
@@ -61,10 +55,37 @@ const GenClips = () => {
         const audioBlob = new Blob([voiceData], { type: 'audio/mp3' });
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
-        audio.play();
+        
+        // Apply volume and speed adjustments directly to the Audio element
+        audio.volume = volume / 10; // Set volume (scaled from 0-1)
+        audio.playbackRate = voiceSpeed / 10; // Adjust playback rate for speed
+
+        audio.play().catch((error) => {
+            console.error("Error playing audio:", error);
+        });
     } else {
         console.error("Failed to retrieve voice data.");
     }
+  };
+
+  const TTSsave = async () => {
+    const voiceData = await readText();
+    
+    if (voiceData) {
+        // Convert to base64 if not already in that format
+        const base64Audio = btoa(
+            new Uint8Array(voiceData).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+
+        // Write the response data (audio) to an MP3 file
+        try {
+            const response = await axios.post('http://localhost:3001/save-audio', { audioData: base64Audio });
+            console.log(response.data);
+            alert('Audio file saved as output.mp3');
+        } catch (error) {
+            console.error('Error saving audio:', error);
+        }
+    };
   };
 
 
@@ -184,10 +205,10 @@ const GenClips = () => {
             </section>
           </details>
           <div class="button-group">
-          <button id="readBtn" className="read-button" onClick={ TTSread } >
+          <button id="readBtn" className="read-button" onClick={ TTSread }>
             Read!
           </button>
-          <button id="saveBtn" className="save-button">
+          <button id="saveBtn" className="save-button" onClick={ TTSsave }>
             Save voice clip!
           </button>
           </div>

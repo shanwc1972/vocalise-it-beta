@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
@@ -21,8 +23,24 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
   await server.start();
   
+  app.use(cors());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+
+  app.post('/save-audio', (req, res) => {
+    console.log('Attempting to save audio');
+    const audioData = req.body.audioData;  // base64 encoded audio data
+    const buffer = Buffer.from(audioData, 'base64');
+    const filePath = path.join(__dirname, 'output.mp3');
+
+    fs.writeFile(filePath, buffer, (err) => {
+        if (err) {
+            console.error('Error saving audio:', err);
+            return res.status(500).send('Error saving audio file');
+        }
+        res.send('Audio file saved');
+    });
+  });
   
   app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware
