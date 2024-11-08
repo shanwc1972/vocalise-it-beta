@@ -38,7 +38,7 @@ export const LOGIN = gql`
           description
           userId
           duration
-          audioUrl
+          audioURL
           format
           date
         }

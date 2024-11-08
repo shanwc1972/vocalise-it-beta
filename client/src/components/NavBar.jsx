@@ -1,10 +1,18 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import AppContext from "../AppContext";
 import { Link } from "react-router-dom";
 
+import Auth from '../utils/auth';
+
 const NavBar = () => {
-  const [loggedIn, setLoggedIn] = useState(false); // placeholder until we implement auth
-  const [isSubscribed, setIsSubscribed] = useState(false); // placeholder until we implement auth
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    // Update loggedIn state based on Auth status whenever NavBar is mounted
+    setLoggedIn(Auth.loggedIn());
+  }, []);
+
   return (
     <nav className="navbar">
       <div className="mx-4">
@@ -17,7 +25,10 @@ const NavBar = () => {
         </div>
       
       {loggedIn ? (
-        <Link to="/saved">Saved Clips</Link>
+        <>
+        <Link to="/saved">&nbsp;Saved Clips</Link>
+        <Link onClick={Auth.logout}>&nbsp;Logout</Link>
+        </>
       ) : (
         <Link to="/login">Login</Link>
       )}
