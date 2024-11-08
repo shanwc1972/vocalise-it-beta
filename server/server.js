@@ -11,6 +11,10 @@ const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -27,20 +31,7 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.post('/save-audio', (req, res) => {
-    console.log('Attempting to save audio');
-    const audioData = req.body.audioData;  // base64 encoded audio data
-    const buffer = Buffer.from(audioData, 'base64');
-    const filePath = path.join(__dirname, 'output.mp3');
-
-    fs.writeFile(filePath, buffer, (err) => {
-        if (err) {
-            console.error('Error saving audio:', err);
-            return res.status(500).send('Error saving audio file');
-        }
-        res.send('Audio file saved');
-    });
-  });
+  
   
   app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware

@@ -88,4 +88,14 @@ export const REMOVE_CLIP = gql`
       clipCount
     }
   }  
-`;  
+`;
+
+export const SAVE_AUDIO = gql`
+mutation SaveAudio($audioData: String!) {
+  saveAudio(audioData: $audioData) {
+    success
+    message
+    fileUrl
+  }
+}
+`;

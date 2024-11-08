@@ -19,6 +19,12 @@ const typeDefs = `
     tags: [String]
   }
 
+  type SaveAudioResponse {
+    success: Boolean!
+    message: String
+    fileUrl: String
+  }
+
   input SavedClipInput {
     title: String!
     description: String
@@ -56,6 +62,7 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     removeClip(clipId: ID!): User
     saveClip(input: SavedClipInput!): User
+    saveAudio(audioData: String!): SaveAudioResponse!
   }
 
   type Auth {

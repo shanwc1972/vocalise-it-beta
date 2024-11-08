@@ -1,14 +1,28 @@
-import React from 'react'
+import { useState, useContext } from "react";
+import AppContext from "../AppContext";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
-    return (
-        <nav className="navbar">
-            <ul>
-                <li><a href="tts.html">Login / Signup</a></li>
-                <li><button id="switchThemeBtn" className="outline contrast">Switch Theme</button></li>
-            </ul>
-        </nav>
-    )
-}
+  const [loggedIn, setLoggedIn] = useState(false); // placeholder until we implement auth
+  const [isSubscribed, setIsSubscribed] = useState(false); // placeholder until we implement auth
+  return (
+    <nav className="navbar">
+      <div className="mx-4">
+      {isSubscribed ? (
+          <p>Thanks for subscribing</p>
+       ) :
+       (
+          <Link to="/subscribe">Please Subscribe!</Link>
+       ) }
+        </div>
+      
+      {loggedIn ? (
+        <Link to="/saved">Saved Clips</Link>
+      ) : (
+        <Link to="/login">Login</Link>
+      )}
+    </nav>
+  );
+};
 
-export default NavBar
+export default NavBar;

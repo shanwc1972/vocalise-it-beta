@@ -9,14 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.14",
-    "bootstrap": "^5.2.3",
-    "graphql": "^16.6.0",
-    "jwt-decode": "^3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2",
-    "axios": "^1.6.1"
+    "@apollo/client": "^3.11.8",
+    "axios": "^1.7.7",
+    "mongodb": "^6.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "@stripe/stripe-js": "^1.54.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
