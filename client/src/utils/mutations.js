@@ -14,7 +14,7 @@ export const CREATE_USER = gql`
           description
           userId
           duration
-          audioUrl
+          audioURL
           format
           date
         }

@@ -16,6 +16,7 @@ const SavedClips = () => {
     const { loading: loadingUser, data:userData } = useQuery(QUERY_ME, {
         skip: !Auth.loggedIn(), // Only run if logged in
     });
+    // Fetch the user's clips from the server
     const username = userData?.me?.username || "";
 
     // Fetch clips only when user data and username is available
@@ -39,7 +40,7 @@ const SavedClips = () => {
         try {
             await removeClip({
                 variables: { clipId },
-                refetchQueries: [{ query: QUERY_ME }],
+                refetchQueries: [{ query: QUERY_GETCLIPS, variables: { username } }],
             });
         } catch (error) {
             console.error("Error deleting clip:", error);

@@ -119,15 +119,15 @@ const GenClips = () => {
           // Save the audio data and get the generated file URL
           const { data: audioData } = await saveAudio({ variables: { audioData: base64Audio } });
           const fileUrl = audioData?.saveAudio?.fileUrl;
-          if (fileUrl) {
+          if (fileUrl&& fileUrl.includes('uploads')) {
             // Define input data for the mutation, using the fileUrl as the audioURL
             const startIndex = fileUrl.indexOf('uploads');
             const subpath = fileUrl.substring(startIndex);
             const input = {
               title: 'Voice Clip', // Replace with dynamic title if available
-              description: `Generated audio clip using ${selectedVoiceType} voice`, // Replace with dynamic description if available
+              description: `Generated audio clip using a ${selectedVoiceType} voice`, // Replace with dynamic description if available
               userId: Auth.getProfile().data._id,
-              duration: 30, // Placeholder; set actual duration if available
+              duration: 10, // Placeholder; set actual duration if available
               audioURL: subpath, // Use the file URL returned from saveAudio
               format: 'mp3',
               date: new Date().toISOString(),
@@ -140,7 +140,7 @@ const GenClips = () => {
             });
     
             if (data && data.saveClip) {
-              const { username, clipCount, savedClips } = data.saveClip;
+              const { username, clipCount } = data.saveClip;
               console.log(`Audio file saved successfully for user ${username}. Total clips: ${clipCount}`);
               alert(`Audio file saved successfully!`);
             } else {
