@@ -60,7 +60,7 @@ export const SAVE_CLIP = gql`
         description
         userId
         duration
-        audioUrl
+        audioURL
         format
         date
       }      
@@ -81,7 +81,7 @@ export const REMOVE_CLIP = gql`
         description
         userId
         duration
-        audioUrl
+        audioURL
         format
         date
       }      

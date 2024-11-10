@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { SAVE_AUDIO } from '../utils/mutations';
+import { QUERY_ME  } from '../utils/queries';
+import { SAVE_CLIP, SAVE_AUDIO } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 const GenClips = () => {
     
@@ -18,8 +20,10 @@ const GenClips = () => {
     const API_KEY = 'AIzaSyCMJ05_dwlQH6ipqi-7lOuxRcSQYw2-n2Q';
     const XI_API_KEY = 'sk_1fa718e479887812560ae779d9acff5a07f721d8261d2837';
     
+    //Prepare our mutation functions
     const [saveAudio] = useMutation(SAVE_AUDIO);
-    
+    const [saveClip] = useMutation(SAVE_CLIP);
+
     //Function to translate text from a source to destination language
     const translateText = async (myText) => {
         if (sourceLang === targetLang) {
@@ -98,28 +102,59 @@ const GenClips = () => {
 
     //Function the save voice data to a file
     const TTSsave = async () => {
-        const voiceData = await readText();
-        if (voiceData) {
-          const base64Audio = btoa(
-            new Uint8Array(voiceData).reduce((data, byte) => data + String.fromCharCode(byte), '')
-          );
-          try {
-            console.log('Attempting to save file');
-            const { data } = await saveAudio({ variables: { audioData: base64Audio } });
-            console.log( data );
-            if (data && data.saveAudio) {
-              const { success, message, fileUrl } = data.saveAudio;
-              if (success) {
-                console.log(`Audio file saved successfully: ${fileUrl}`);
-                alert(`Audio file saved: ${fileUrl}`);
-              } else {
-                console.error('Error saving audio:', message);
-              }
+      // Check if the user is logged in
+      if (!Auth.loggedIn()) {
+        alert('Please log in to save the audio file.');
+      return;
+      }
+
+      const voiceData = await readText();
+      if (voiceData) {
+        const base64Audio = btoa(
+          new Uint8Array(voiceData).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+        try {
+          console.log('Attempting to save file');
+          
+          // Save the audio data and get the generated file URL
+          const { data: audioData } = await saveAudio({ variables: { audioData: base64Audio } });
+          const fileUrl = audioData?.saveAudio?.fileUrl;
+          if (fileUrl) {
+            // Define input data for the mutation, using the fileUrl as the audioURL
+            const startIndex = fileUrl.indexOf('uploads');
+            const subpath = fileUrl.substring(startIndex);
+            const input = {
+              title: 'Voice Clip', // Replace with dynamic title if available
+              description: `Generated audio clip using ${selectedVoiceType} voice`, // Replace with dynamic description if available
+              userId: Auth.getProfile().data._id,
+              duration: 30, // Placeholder; set actual duration if available
+              audioURL: subpath, // Use the file URL returned from saveAudio
+              format: 'mp3',
+              date: new Date().toISOString(),
+            };
+    
+            // Execute the SAVE_CLIP mutation
+            const { data } = await saveClip({
+              variables: { input },
+              refetchQueries: [{ query: QUERY_ME }],
+            });
+    
+            if (data && data.saveClip) {
+              const { username, clipCount, savedClips } = data.saveClip;
+              console.log(`Audio file saved successfully for user ${username}. Total clips: ${clipCount}`);
+              alert(`Audio file saved successfully!`);
+            } else {
+              console.error('Error saving audio.');
             }
-          } catch (error) {
-            console.error('Error saving audio:', error);
+          } else {
+            console.error('Failed to get file URL from saveAudio.');
           }
+        } catch (error) {
+          console.error('Error saving audio:', error);
         }
+      } else {
+        console.error("Failed to retrieve voice data.");
+      }
     };
     
     return (

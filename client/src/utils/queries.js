@@ -12,7 +12,7 @@ export const QUERY_USERS = gql`
           description
           userId
           duration
-          audioUrl
+          audioURL
           format
           date
         }
@@ -33,7 +33,7 @@ export const QUERY_ME = gql`
         description
         userId
         duration
-        audioUrl
+        audioURL
         format
         date
       }
@@ -54,7 +54,7 @@ export const QUERY_USER = gql`
           description
           userId
           duration
-          audioUrl
+          audioURL
           format
           date
         }
@@ -70,7 +70,7 @@ export const QUERY_USER = gql`
       description
       userId
       duration
-      audioUrl
+      audioURL
       format
       date
     }

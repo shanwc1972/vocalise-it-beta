@@ -15,4 +15,39 @@
 .save-button {
     background-color: #28a745;
 }
+.clips-list {
+    list-style: none;
+    padding: 0;
+}
+.clip-item {
+    background-color: #444;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    list-style: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+.metadata-group {
+    display: block;
+}
+.button-group {
+    justify-content: space-between;
+}
+.myClipsContainer {
+    width: 80%;
+    max-width: 600px;
+    background-color: #2f2f4f;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: block;
+    margin: 0 auto;
+}
+.clipsheader {
+    text-align: center;
+    font-size: 1.5em; 
+    margin: 0.8em;
+}
 

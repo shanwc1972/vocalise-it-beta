@@ -12,6 +12,9 @@ const db = require('./config/connection');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// Enable CORS for all origins
+app.use(cors());
+
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -27,12 +30,9 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
   await server.start();
   
-  app.use(cors());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  
-  
   app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware
   }));

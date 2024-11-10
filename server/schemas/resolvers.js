@@ -13,6 +13,7 @@ const resolvers = {
     
     //Get the details of the logged-in user
     me: async (parent, args, context) => {
+      console.log('query me called');
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
           .select('-__v -password') //Exclude the version key
@@ -82,7 +83,7 @@ const resolvers = {
 
     // Save a new clip to the user's savedClips array (if authenticated)
     saveClip: async (parent, { input }, context) => {
-      console.log(`saveClip called with paramater ${input}`); //For the benefit of our diagnostic logging
+      console.log(`saveClip called with parameter ${input}`); //For the benefit of our diagnostic logging
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
@@ -98,13 +99,14 @@ const resolvers = {
 
     // Delete a clip from the user's savedClips array (if authenticated)
     removeClip: async (parent, { clipId }, context) => {
-      console.log(`removeClips called with parameter ${ClipId}`); //For the benefit of our diagnostic logging
+      console.log(`removeClips called with parameter ${clipId}`); //For the benefit of our diagnostic logging
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $pull: { savedClips: { ClipId } } }, // Pull the voiceClip with the matching clipId
+          { $pull: { savedClips: { _id: clipId } } }, // Pull the voiceClip with the matching clipId
           { new: true }
         ).populate('savedClips');
+        console.log(updatedUser);
 
         return updatedUser;
       }

@@ -19,7 +19,7 @@ const voiceClipSchema = new Schema({
     type: Number,  // duration in seconds
     required: true
   },
-  audioUrl: {
+  audioURL: {
     type: String,  // URL to the file if stored in cloud storage (e.g., AWS S3)
     required: true
   },
