@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { QUERY_ME  } from '../utils/queries';
+import { useQuery, useMutation } from '@apollo/client';
+import { QUERY_GETCLIPS, QUERY_ME  } from '../utils/queries';
 import { SAVE_CLIP, SAVE_AUDIO } from '../utils/mutations';
 import Auth from '../utils/auth';
 
@@ -23,6 +23,12 @@ const GenClips = () => {
     //Prepare our mutation functions
     const [saveAudio] = useMutation(SAVE_AUDIO);
     const [saveClip] = useMutation(SAVE_CLIP);
+
+    // Fetch user data from the GraphQL server
+    const { loading: loadingUser, data:userData } = useQuery(QUERY_ME, {
+      skip: !Auth.loggedIn(), // Only run if logged in
+    });
+    const username = userData?.me?.username || "";
 
     //Function to translate text from a source to destination language
     const translateText = async (myText) => {
@@ -102,6 +108,7 @@ const GenClips = () => {
 
     //Function the save voice data to a file
     const TTSsave = async () => {
+            
       // Check if the user is logged in
       if (!Auth.loggedIn()) {
         alert('Please log in to save the audio file.');
@@ -147,7 +154,7 @@ const GenClips = () => {
                         // Execute the SAVE_CLIP mutation
                         const { data } = await saveClip({
                             variables: { input },
-                            refetchQueries: [{ query: QUERY_ME }],
+                            refetchQueries: [{ query: QUERY_GETCLIPS, variables: { username } }],
                         });
 
                         if (data && data.saveClip) {
