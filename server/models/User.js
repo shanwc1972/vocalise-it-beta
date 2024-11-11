@@ -55,6 +55,10 @@ const userSchema = new Schema(
     },
     // `savedClips` will now contain embedded clip data directly
     savedClips: [embeddedClipSchema],
+    isSubscribed: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     toJSON: {

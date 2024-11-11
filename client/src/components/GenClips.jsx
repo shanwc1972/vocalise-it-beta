@@ -111,49 +111,64 @@ const GenClips = () => {
       const voiceData = await readText();
       if (voiceData) {
         const base64Audio = btoa(
-          new Uint8Array(voiceData).reduce((data, byte) => data + String.fromCharCode(byte), '')
+            new Uint8Array(voiceData).reduce((data, byte) => data + String.fromCharCode(byte), '')
         );
+
         try {
-          console.log('Attempting to save file');
-          
-          // Save the audio data and get the generated file URL
-          const { data: audioData } = await saveAudio({ variables: { audioData: base64Audio } });
-          const fileUrl = audioData?.saveAudio?.fileUrl;
-          if (fileUrl&& fileUrl.includes('uploads')) {
-            // Define input data for the mutation, using the fileUrl as the audioURL
-            const startIndex = fileUrl.indexOf('uploads');
-            const subpath = fileUrl.substring(startIndex);
-            const input = {
-              title: 'Voice Clip', // Replace with dynamic title if available
-              description: `Generated audio clip using a ${selectedVoiceType} voice`, // Replace with dynamic description if available
-              userId: Auth.getProfile().data._id,
-              duration: 10, // Placeholder; set actual duration if available
-              audioURL: subpath, // Use the file URL returned from saveAudio
-              format: 'mp3',
-              date: new Date().toISOString(),
-            };
-    
-            // Execute the SAVE_CLIP mutation
-            const { data } = await saveClip({
-              variables: { input },
-              refetchQueries: [{ query: QUERY_ME }],
-            });
-    
-            if (data && data.saveClip) {
-              const { username, clipCount } = data.saveClip;
-              console.log(`Audio file saved successfully for user ${username}. Total clips: ${clipCount}`);
-              alert(`Audio file saved successfully!`);
-            } else {
-              console.error('Error saving audio.');
-            }
-          } else {
-            console.error('Failed to get file URL from saveAudio.');
+            console.log('Attempting to save file');
+            
+            // Save the audio data and get the generated file URL
+            const { data: audioData } = await saveAudio({ variables: { audioData: base64Audio } });
+            const fileUrl = audioData?.saveAudio?.fileUrl;
+
+            if (fileUrl && fileUrl.includes('uploads')) {
+                const startIndex = fileUrl.indexOf('uploads');
+                const subpath = fileUrl.substring(startIndex);
+
+                // Decode the base64 audio data to get the duration
+                const audioBuffer = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                audioContext.decodeAudioData(audioBuffer.buffer)
+                    .then(async (decodedData) => {
+                        const duration = decodedData.duration; // Get the duration in seconds
+
+                        // Define input data for the mutation, including the duration
+                        const input = {
+                            title: 'Voice Clip', // Replace with dynamic title if available
+                            description: `Generated audio clip using ${selectedVoiceType} voice`, // Replace with dynamic description if available
+                            userId: Auth.getProfile().data._id,
+                            duration: Math.round(duration), // Round to nearest second if needed
+                            audioURL: subpath, // Use the file URL returned from saveAudio
+                            format: 'mp3',
+                            date: new Date().toISOString(),
+                        };
+
+                        // Execute the SAVE_CLIP mutation
+                        const { data } = await saveClip({
+                            variables: { input },
+                            refetchQueries: [{ query: QUERY_ME }],
+                        });
+
+                        if (data && data.saveClip) {
+                            const { username, clipCount } = data.saveClip;
+                            console.log(`Audio file saved successfully for user ${username}. Total clips: ${clipCount}`);
+                            alert(`Audio file saved successfully!`);
+                        } else {
+                            console.error('Error saving audio.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error decoding audio data:', error);
+                    });
+              } else {
+                console.error('Failed to get file URL from saveAudio.');
+              }
+          } catch (error) {
+            console.error('Error saving audio:', error);
           }
-        } catch (error) {
-          console.error('Error saving audio:', error);
-        }
       } else {
-        console.error("Failed to retrieve voice data.");
+          console.error("Failed to retrieve voice data.");
       }
     };
     

@@ -27,6 +27,7 @@ export const QUERY_ME = gql`
       _id
       username
       email
+      isSubscribed
       savedClips {
         _id
         title
@@ -62,7 +63,7 @@ export const QUERY_USER = gql`
       }
     }
   `;
-  export const QUERY_GETCLIPS = gql`
+export const QUERY_GETCLIPS = gql`
   query getClips($username: String!) {
     getClips(username: $username) {
       _id
@@ -75,4 +76,12 @@ export const QUERY_USER = gql`
       date
     }
   }
-  `;        
+  `;
+
+export const GET_SUBSCRIPTION = gql`
+  query getSubscription {
+    getSubscription {
+      sessionId
+    }
+  }
+`;

@@ -5,6 +5,7 @@ const typeDefs = `
     email: String!
     savedClips: [VoiceClip]!
     clipCount: Int
+    isSubscribed: Boolean
   }
 
   type VoiceClip {
@@ -22,6 +23,10 @@ const typeDefs = `
     success: Boolean!
     message: String
     fileUrl: String
+  }
+
+  type Checkout {
+    sessionId: ID
   }
 
   input SavedClipInput {
@@ -54,6 +59,7 @@ const typeDefs = `
     user(username: String!): User
     me: User
     getClips(username: String!): [VoiceClip]
+    getSubscription: Checkout
   }
 
   type Mutation {
