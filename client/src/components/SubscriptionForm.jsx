@@ -23,13 +23,17 @@ const SubscriptionForm = () => {
   }, [data])
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <button 
-        onClick={handleSubscribe} 
-        className="bg-purple-700 text-white py-2 px-4 rounded cursor-pointer text-xl transition duration-300 ease-in-out hover:bg-purple-900"
-      >
-        Subscribe
-      </button>
+    <div className="flex-col justify-center items-center h-screen">
+      <div className="bg-gray-800 p-8 rounded shadow-md text-center">
+        <h2 className="text-2xl font-bold mb-4">Subscribe to our Service</h2>
+        <p className="mb-4">By subscribing to our service, you'll gain access current and potential future premium features, such as being able to download your own clips!</p>
+        <button 
+          onClick={handleSubscribe} 
+          className="bg-purple-700 text-white py-2 px-4 rounded cursor-pointer text-xl transition duration-300 ease-in-out hover:bg-purple-900"
+        >
+          Subscribe
+        </button>
+      </div>
     </div>
   )
 }

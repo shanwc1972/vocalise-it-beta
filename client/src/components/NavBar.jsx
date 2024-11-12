@@ -25,21 +25,25 @@ const NavBar = () => {
   console.log("LoggedIn:", loggedIn, "IsSubscribed:", isSubscribed);
 
   return (
-    <nav className="navbar">
+    <nav className="navbar flex flex-col sm:flex-row items-center justify-between p-4 text-white">
       {loggedIn ? (
         <>
-          <div className="mx-4">
+          <div className="mx-4 mb-2 hidden sm:mb-0 md:flex">
             {isSubscribed ? (
-              <p>Thanks for subscribing</p>
+              <p className="bg-yellow-500 rounded p-2 text-black">Thanks for subscribing!</p>
             ) : (
-              <Link to="/subscribe">Please Subscribe!</Link>
+              <div className="bg-yellow-500 rounded p-2">
+                <Link to="/subscribe" className="text-white">Please Subscribe!</Link>
+              </div>
             )}
           </div>
-          <Link to="/saved">&nbsp;Saved Clips</Link>
-          <Link to="#" onClick={Auth.logout}>&nbsp;Logout</Link>
+          <div className="flex flex-col sm:flex-row md:flex-row items-center">
+            <Link to="/saved" className="mx-4 p-2 mb-2 sm:mb-0">&nbsp;Saved Clips</Link>
+            <Link to="#" className="mx-4 p-2" onClick={Auth.logout}>&nbsp;Logout</Link>
+          </div>
         </>
       ) : (
-        <Link to="/login">Login</Link>
+        <Link to="/login" className="p-2">Login</Link>
       )}
     </nav>
   );
