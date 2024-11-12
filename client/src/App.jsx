@@ -1,22 +1,24 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context'
-import Auth from './utils/auth';
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-import Header from './components/Header'
-import Footer from './components/Footer'
-import './App.css'
-import { Outlet } from 'react-router-dom';
-import AppContext from './AppContext';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import "./App.css";
+import { Outlet } from "react-router-dom";
+import AppContext from "./AppContext";
+import Auth from "./utils/auth";
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -25,7 +27,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -37,18 +39,29 @@ const client = new ApolloClient({
 });
 
 function App() {
-
   return (
-    <ApolloProvider client={client}>
-      <AppContext.Provider value={{
-        
-      }}>
-        <Header/>
-        <Outlet />
-        <Footer/>
-      </AppContext.Provider>
-    </ApolloProvider>
-  )
+    <div>
+      <ApolloProvider client={client}>
+        <AppContext.Provider value={{}}>
+          <Header />
+          <Outlet />
+          <Footer />
+        </AppContext.Provider>
+      </ApolloProvider>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
